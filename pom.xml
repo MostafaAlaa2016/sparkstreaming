@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>BINS_STREAMS</groupId>
+    <artifactId>SPARK</artifactId>
+    <version>1.0</version>
+    <dependencies>
+
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_2.11</artifactId>
+            <version>2.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_2.11</artifactId>
+            <version>2.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-streaming -->
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming_2.11</artifactId>
+            <version>2.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.debasishg</groupId>
+            <artifactId>redisclient_2.11</artifactId>
+            <version>3.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.typesafe.scala-logging</groupId>
+            <artifactId>scala-logging-slf4j_2.11</artifactId>
+            <version>2.1.2</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.github.pathikrit/better-files -->
+        <dependency>
+            <groupId>com.github.pathikrit</groupId>
+            <artifactId>better-files_2.11</artifactId>
+            <version>3.4.0</version>
+        </dependency>
+
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
+                        <phase>package</phase> <!-- bind to the packaging phase -->
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--    <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>wagon-maven-plugin</artifactId>
+                    <version>1.0</version>
+                    <executions>
+                        <execution>
+                            <id>deploy_to_prod</id>
+                            <phase>install</phase>
+                            <goals>
+                                <goal>upload-single</goal>
+                            </goals>
+                            <configuration>
+                                &lt;!&ndash; Describes the local directory, which contents are copied. &ndash;&gt;
+                                <fromFile>${jar.local.dir}</fromFile>
+                                &lt;!&ndash; Describes the included files.
+                                <includes>*.jar</includes> &ndash;&gt;
+                                &lt;!&ndash;Describes the url of the remote FTP server.&ndash;&gt;
+                                <url>${bins.remote.url}</url>
+                                &lt;!&ndash;Describes the remote directory, where the contents of the local directory are copied. &ndash;&gt;
+                                <toFile>${bins.remote.dir}</toFile>
+                                &lt;!&ndash; Describes the server id, which is used to fetch the used credentials from settings.xml. &ndash;&gt;
+                                <serverId>${bins.remote.server.id}</serverId>
+                            </configuration>
+                        </execution>
+                        &lt;!&ndash;<execution>
+                            <phase>install</phase>
+                            <goals>
+                                <goal>sshexec</goal>
+                            </goals>
+                            <configuration>
+                                <serverId>${bins.remote.server.id}</serverId>
+                                <url>${bins.remote.url}</url>
+                                <displayCommandOutputs>true</displayCommandOutputs>
+                                <commands>
+                                    <command>bash /bigpfsprod/home/MostafaAlaa/DPI/JAR/runscript.sh </command>
+                                </commands>
+                            </configuration>
+                        </execution>&ndash;&gt;
+
+                    </executions>
+
+
+                </plugin>-->
+        </plugins>
+        <!--<sourceDirectory>${src.dir}</sourceDirectory>-->
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh</artifactId>
+                <version>2.8</version>
+            </extension>
+        </extensions>
+    </build>
+    <properties>
+        <!-- Settings for CSS files -->
+        <jar.local.dir>${basedir}//target//SPARK-1.0-jar-with-dependencies.jar</jar.local.dir>
+
+        <!-- Insert the remote target directory path for CSS files -->
+        <!-- <bins.remote.dir>/bigpfsprod/home/MostafaAlaa/DPI/JAR/Spark_Dynamic_ETL-0.0.1-jar-with-dependencies.jar
+         </bins.remote.dir>-->
+
+        <bins.remote.dir>/rtmstaging/BINS/CODEBASE/MODELED_ZONE/SPARK/JAR/SPARK-1.0-jar-with-dependencies.jar
+        </bins.remote.dir>
+
+        <!--<bins.remote.server.id>binsprod</bins.remote.server.id>-->
+        <bins.remote.server.id>binspreprod</bins.remote.server.id>
+        <!-- Insert the url address of the FTP server for CSS files -->
+        <bins.remote.url>10.37.254.23</bins.remote.url>
+        <!--<bins.remote.url>10.51.225.197</bins.remote.url>-->
+
+        <!--        &lt;!&ndash; Settings for image files &ndash;&gt;
+                <scala.local.dir>${basedir}/src/main/webapp/images</scala.local.dir>
+                &lt;!&ndash; Insert the remote target directory path for images &ndash;&gt;
+                <scala.remote.dir></scala.remote.dir>
+                <scala.remote.server.id>>images</scala.remote.server.id>>
+                &lt;!&ndash; Insert the url address of the FTP server for image files &ndash;&gt;
+                <scala.remote.url></scala.remote.url>
+
+                &lt;!&ndash; Settings for War files&ndash;&gt;
+                <war.local.dir>${basedir}/target</war.local.dir>
+                &lt;!&ndash; Insert the remote target directory path for war file &ndash;&gt;
+                <war.remote.dir></war.remote.dir>
+                <war.remote.server.id>war</war.remote.server.id>
+                &lt;!&ndash; Insert the url address of FTP server for war file &ndash;&gt;
+                <war.remote.url></war.remote.url>-->
+    </properties>
+
+</project>
